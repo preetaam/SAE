@@ -1,3 +1,46 @@
+#include <stdio.h>
+#include <string.h>
+ 
+typedef struct person {
+    char lastName[15];
+    char firstName[15];
+    char age[4];
+} Person;
+ 
+void blank100();
+void tenEntry();
+void printTen();
+void updateRecord();
+void deleteRecord();
+ 
+int main(void) {
+ 
+    blank100();
+    tenEntry();
+    printTen();
+    updateRecord();
+    printTen();
+    deleteRecord();
+    printTen();
+}
+ 
+// Creates 100 blank entries
+void blank100() {
+    
+    FILE* wfPtr;
+    if ((wfPtr = fopen("nameage.dat", "wb")) == NULL) {
+        puts("Error opening nameage.dat for writing");
+        return;
+    }
+ 
+    Person blankPerson = { "", "", "0" };
+ 
+    for (int i0 = 0; i0 < 100; ++i0) {
+        fwrite(&blankPerson, sizeof(Person), 1, wfPtr);
+    }
+    fclose(wfPtr);
+}
+ 
 // Fills ten entries
 void tenEntry() {
  
@@ -101,3 +144,19 @@ void deleteRecord() {
     strcpy(userEntry.firstName, token);
     token = strtok(NULL, ", \n");
     strcpy(userEntry.age, token);
+ 
+    Person search = { "", "", "0" };
+    while (fread(&search, sizeof(Person), 1, fPtr) && strcmp(search.lastName, userEntry.lastName)) {
+ 
+    }
+    if (strcmp(search.lastName, userEntry.lastName) == 0) {
+        fseek(fPtr, -1 * (int)sizeof(Person), SEEK_CUR);
+        Person blank = { "", "", "" };
+        fwrite(&blank, sizeof(Person), 1, fPtr);
+    }
+    else {
+        puts("Record not found.\n");
+    }
+ 
+    fclose(fPtr);
+}
