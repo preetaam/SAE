@@ -1,0 +1,45 @@
+#include <bits/stdc++.h>
+using namespace std;
+bool isoprator(char x)
+{
+    if (x == '+' || x == '-' || x == '*' || x == '/')
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
+string postexp(string expr)
+{
+    stack<string>s;
+    int len,i;
+    len=expr.size();
+    for (i=len-1;i>=0;i--)
+    {
+        if (isoprator(expr[i]))
+        {
+            string op1=s.top();
+            s.pop();
+            string op2=s.top();
+            s.pop();
+
+            string temp=op1 + op2 + expr[i];
+            s.push(temp);
+        }
+        else
+        {
+            s.push(string(1,expr[i]));
+        }
+    }
+    return s.top();
+}
+int main()
+{
+    string expr;
+    cout << "enter prefix expression=";
+    cin >> expr;
+    cout << "postfix expression is=" << postexp(expr);
+    return 0;
+}
